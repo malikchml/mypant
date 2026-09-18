@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MyPaint — Dessine tes idées</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f2f8;color:#252338;font-family:system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:28px 20px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}.brand{font-size:25px;font-weight:800;letter-spacing:-1px}.brand span{color:#7953d2}.badge{font-size:12px;color:#666079;border:1px solid #dcd8e8;padding:8px 12px;border-radius:30px}h1{font-size:clamp(27px,4vw,40px);letter-spacing:-1.5px;margin:0 0 8px}.intro{color:#726c83;margin:0 0 26px;line-height:1.6}.workspace{display:grid;grid-template-columns:210px 1fr;gap:20px}.panel{background:white;border:1px solid #e5e1ef;border-radius:20px;padding:18px}.label{font-size:11px;letter-spacing:1.6px;font-weight:750;color:#898196;display:block;margin-bottom:12px}.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{font:600 13px system-ui;border:1px solid #e5e1ef;background:white;color:#51495f;border-radius:11px;padding:11px 12px;cursor:pointer;touch-action:manipulation}button:hover{background:#f5f1ff}button:focus-visible,input:focus-visible,svg:focus-visible{outline:3px solid #9571e4;outline-offset:3px}button:disabled{opacity:.4;cursor:default}.tools button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 5px}.tools b{font-size:25px;font-weight:400;line-height:1.2}.tools button[aria-pressed=true]{background:#efe8ff;border-color:#9571e4;color:#6840bb}hr{border:0;border-top:1px solid #eeeaf4;margin:20px 0}.colors{display:flex;gap:8px;flex-wrap:wrap}.swatch{height:26px;width:26px;padding:0;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px #ddd}.swatch[aria-pressed=true]{outline:2px solid #7953d2;outline-offset:2px}.custom{display:flex;align-items:center;gap:9px;font-size:12px;margin-top:14px}input[type=color]{width:30px;height:30px;padding:0;border:0;background:none;cursor:pointer}input[type=range]{width:100%;accent-color:#7953d2}label.check{font-size:13px;display:flex;align-items:center;gap:8px;margin-top:14px}input[type=checkbox]{accent-color:#7953d2}.paper-wrap{min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;font-size:13px;color:#7f778e}.topbar strong{color:#433b54}.paper{background:white;border:1px solid #dfdae9;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px #3b24590a}#drawing{display:block;width:100%;height:auto;aspect-ratio:1000/700;touch-action:none;cursor:crosshair;background:#fff}.bottom{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.primary{background:#7953d2;color:white;border-color:#7953d2;margin-left:auto}.primary:hover{background:#6840bb}#status{font-size:13px;color:#766a87;min-height:20px;line-height:1.6}footer{text-align:center;color:#948b9f;font-size:12px;margin-top:25px}@media(max-width:720px){main{padding:18px 12px}.workspace{grid-template-columns:1fr;gap:14px}.panel{padding:14px}.tools{grid-template-columns:repeat(6,1fr)}.tools button{font-size:10px;padding:8px 2px}.tools b{font-size:22px}hr{margin:14px 0}.settings{display:grid;grid-template-columns:1fr 1fr;gap:20px}.settings hr{display:none}.colors{gap:7px}.badge{font-size:10px}h1{margin-top:8px}.intro{font-size:14px;margin-bottom:18px}.primary{margin-left:0}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand">My<span>Paint</span><span aria-hidden="true"> ✦</span></div><span class="badge">Ton atelier de dessin</span></header>
+<h1>Des formes, plein d’idées.</h1>
+<p class="intro">Choisis une forme et une couleur, puis clique et glisse sur la feuille pour dessiner.</p>
+<div class="workspace">
+<aside class="panel" aria-label="Outils de dessin">
+<span class="label">01 · LES FORMES</span>
+<div class="tools">
+<button data-tool="circle" aria-pressed="true"><b aria-hidden="true">○</b>Rond</button>
+<button data-tool="triangle" aria-pressed="false"><b aria-hidden="true">△</b>Triangle</button>
+<button data-tool="square" aria-pressed="false"><b aria-hidden="true">□</b>Carré</button>
+<button data-tool="rectangle" aria-pressed="false"><b aria-hidden="true">▭</b>Rectangle</button>
+<button data-tool="line" aria-pressed="false"><b aria-hidden="true">╱</b>Ligne</button>
+<button data-tool="pen" aria-pressed="false"><b aria-hidden="true">✎</b>Crayon</button>
+</div><hr>
+<div class="settings"><section><span class="label">02 · LA COULEUR</span>
+<div class="colors" id="colors"></div>
+<label class="custom"><input type="color" id="color" value="#7953d2">Personnaliser</label></section><hr>
+<section><label class="label" for="width">03 · TRAIT : <output id="widthValue">4</output> PX</label>
+<input type="range" id="width" min="1" max="20" value="4">
+<label class="check"><input type="checkbox" id="fill" checked>Remplir les formes</label></section></div>
+</aside>
+<section class="paper-wrap" aria-label="Feuille de dessin">
+<div class="topbar"><strong>Ma création</strong><span id="count">0 forme</span></div>
+<div class="paper"><svg id="drawing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" role="img" aria-label="Feuille de dessin interactive : dessine avec la souris ou le doigt"><g id="art"></g><g id="preview"></g></svg></div>
+<div class="bottom"><button id="undo" disabled>↶ Annuler</button><button id="redo" disabled>↷ Rétablir</button><button id="clear" disabled>Tout effacer</button><button id="download" class="primary">↓ Télécharger PNG</button></div>
+<p id="status" role="status" aria-live="polite">Rond sélectionné. Trace ta première forme !</p>
+</section></div>
+<footer>Souris ou écran tactile · Annuler : Ctrl / ⌘ + Z · Ton dessin reste dans cette page tant qu’elle est ouverte.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),svg=$('drawing'),art=$('art'),preview=$('preview');
+const NS='http://www.w3.org/2000/svg',labels={circle:'Rond',triangle:'Triangle',square:'Carré',rectangle:'Rectangle',line:'Ligne',pen:'Crayon'};
+let tool='circle',shapes=[],past=[],future=[],active=null;
+const palette=[['#7953d2','Violet'],['#ef6587','Rose'],['#f3ad45','Orange'],['#4fa887','Vert'],['#4b93d7','Bleu'],['#262737','Noir']];
+for(const [color,name] of palette){const b=document.createElement('button');b.className='swatch';b.style.background=color;b.setAttribute('aria-label',name);b.dataset.color=color;b.onclick=()=>{$('color').value=color;updateColors();};$('colors').append(b);}
+function updateColors(){document.querySelectorAll('.swatch').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.color===$('color').value)));}
+updateColors();$('color').oninput=updateColors;$('width').oninput=()=>{$('widthValue').textContent=$('width').value;};
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('[data-tool]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('status').textContent=labels[tool]+' sélectionné. Clique et glisse pour dessiner.';});
+function point(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const a=p.matrixTransform(svg.getScreenCTM().inverse());return {x:Math.max(0,Math.min(1000,a.x)),y:Math.max(0,Math.min(700,a.y))};}
+function element(s){const {x,y}=s.start,ex=s.end.x,ey=s.end.y;let w=Math.abs(ex-x),h=Math.abs(ey-y),left=Math.min(x,ex),top=Math.min(y,ey),node,attrs;
+if(s.tool==='square'||s.tool==='circle'){const side=Math.min(w,h);w=side;h=side;left=ex<x?x-side:x;top=ey<y?y-side:y;}
+if(s.tool==='circle'){node='circle';attrs={cx:left+w/2,cy:top+h/2,r:w/2};}
+else if(s.tool==='triangle'){node='polygon';attrs={points:`${left+w/2},${top} ${left+w},${top+h} ${left},${top+h}`};}
+else if(s.tool==='line'){node='line';attrs={x1:x,y1:y,x2:ex,y2:ey};}
+else if(s.tool==='pen'){node='path';attrs={d:s.points.map((p,i)=>`${i?'L':'M'} ${p.x} ${p.y}`).join(' ')};}
+else{node='rect';attrs={x:left,y:top,width:w,height:h};}
+const el=document.createElementNS(NS,node);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);el.setAttribute('stroke',s.color);el.setAttribute('stroke-width',s.width);el.setAttribute('stroke-linecap','round');el.setAttribute('stroke-linejoin','round');el.setAttribute('fill',s.fill&&!['pen','line'].includes(s.tool)?s.color:'none');return el;}
+function render(){art.replaceChildren(...shapes.map(element));$('count').textContent=shapes.length+' forme'+(shapes.length>1?'s':'');$('undo').disabled=!past.length;$('redo').disabled=!future.length;$('clear').disabled=!shapes.length;}
+function commit(next){past.push(shapes);if(past.length>100)past.shift();shapes=next;future=[];render();}
+function cancel(){active=null;preview.replaceChildren();}
+svg.addEventListener('pointerdown',e=>{if(active||e.button!==0)return;e.preventDefault();const p=point(e);active={id:e.pointerId,tool,color:$('color').value,width:Number($('width').value),fill:$('fill').checked,start:p,end:p,points:[p]};svg.setPointerCapture(e.pointerId);});
+svg.addEventListener('pointermove',e=>{if(!active||active.id!==e.pointerId)return;active.end=point(e);if(active.tool==='pen')active.points.push(active.end);preview.replaceChildren(element(active));});
+svg.addEventListener('pointerup',e=>{if(!active||active.id!==e.pointerId)return;active.end=point(e);if(active.tool==='pen')active.points.push(active.end);const s=active,dx=Math.abs(s.end.x-s.start.x),dy=Math.abs(s.end.y-s.start.y);const valid=['pen','line'].includes(s.tool)?(s.tool==='pen'?s.points.some(p=>Math.hypot(p.x-s.start.x,p.y-s.start.y)>2):Math.hypot(dx,dy)>2):Math.min(dx,dy)>2;cancel();if(valid){commit([...shapes,s]);$('status').textContent=labels[s.tool]+' ajouté. Continue ton dessin !';}else{$('status').textContent='Maintiens appuyé et glisse pour donner une taille à ta forme.';}});
+svg.addEventListener('pointercancel',cancel);svg.addEventListener('lostpointercapture',cancel);
+function undo(){if(active||!past.length)return;future.push(shapes);shapes=past.pop();render();$('status').textContent='Dernière action annulée.';}
+function redo(){if(active||!future.length)return;past.push(shapes);shapes=future.pop();render();$('status').textContent='Action rétablie.';}
+$('undo').onclick=undo;$('redo').onclick=redo;$('clear').onclick=()=>{if(active||!shapes.length)return;commit([]);$('status').textContent='Feuille effacée. Tu peux annuler pour retrouver ton dessin.';};
+document.addEventListener('keydown',e=>{if(e.target instanceof HTMLInputElement)return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}else if(e.key==='Escape'){cancel();}});
+$('download').onclick=()=>{const root=document.createElementNS(NS,'svg');root.setAttribute('width','1000');root.setAttribute('height','700');root.setAttribute('viewBox','0 0 1000 700');root.append(art.cloneNode(true));const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(root)],{type:'image/svg+xml;charset=utf-8'})),img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=1000;c.height=700;const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,1000,700);ctx.drawImage(img,0,0);URL.revokeObjectURL(url);c.toBlob(blob=>{if(!blob){$('status').textContent='Export impossible. Réessaie.';return;}const link=document.createElement('a'),png=URL.createObjectURL(blob);link.href=png;link.download='mon-dessin.png';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(png),10000);$('status').textContent='Ton dessin PNG est prêt à être téléchargé.';},'image/png');};img.onerror=()=>{URL.revokeObjectURL(url);$('status').textContent='Export impossible. Réessaie.';};img.src=url;};
+render();
+</script>
+</body>
+</html>
